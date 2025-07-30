@@ -1,17 +1,32 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}EcoRide{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="p-3 bg-dark text-white">
+        <nav class="container d-flex justify-content-between align-items-center">
+            <a href="{{ path('app_home') }}" class="text-white text-decoration-none">EcoRide</a>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
+            <div>
+                {% if app.user %}
+                    <span class="me-2">Bienvenue, {{ app.user.firstname }}</span>
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-sm">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-light btn-sm">Connexion</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mt-4">
         {% block body %}{% endblock %}
-    </body>
+    </main>
+
+    <footer class="text-center mt-5 p-3 bg-light">
+        <small>© EcoRide {{ "now"|date("Y") }}</small>
+    </footer>
+</body>
 </html>
