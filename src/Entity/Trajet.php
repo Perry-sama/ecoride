@@ -28,6 +28,17 @@ class Trajet
     #[ORM\Column]
     private ?float $prix = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'trajets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,4 +103,37 @@ class Trajet
 
         return $this;
     }
+
+    public function getDescription(): ?string
+{
+    return $this->description;
+}
+
+public function setDescription(?string $description): static
+{
+    $this->description = $description;
+    return $this;
+}
+
+public function getCreatedAt(): ?\DateTimeImmutable
+{
+    return $this->createdAt;
+}
+
+public function setCreatedAt(\DateTimeImmutable $createdAt): static
+{
+    $this->createdAt = $createdAt;
+    return $this;
+}
+
+public function getUser(): ?\App\Entity\User
+{
+    return $this->user;
+}
+
+public function setUser(?\App\Entity\User $user): static
+{
+    $this->user = $user;
+    return $this;
+}
 }

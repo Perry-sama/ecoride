@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 {
     #[ORM\Id]
@@ -45,11 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserInt
 {
     $this->createdAt = new \DateTimeImmutable();
 }
-
-
-    #[ORM\Column(length: 255)]
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -126,10 +121,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserInt
 
     #[\Deprecated]
     public function eraseCredentials(): void
-    {
-        // @deprecated, to be removed when upgrading to Symfony 8
-    }
-
+{
+    // Si tu stockes des données temporaires sensibles, efface-les ici
+}
 public function getFirstname(): ?string
 {
     return $this->firstname;

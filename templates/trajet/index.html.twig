@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des trajets{% endblock %}
+
+{% block body %}
+<main class="container my-5">
+    <section class="text-center mb-4">
+        <h1>Liste des trajets</h1>
+        <a href="{{ path('app_trajet_new') }}" class="btn btn-primary mt-2">Ajouter un nouveau trajet</a>
+    </section>
+
+    <section class="row row-cols-1 row-cols-md-2 g-4">
+        {% for trajet in trajets %}
+            <article class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trajet.depart }} → {{ trajet.destination }}</h5>
+                        <p class="card-text">
+                            <strong>Date/Heure :</strong> {{ trajet.dateHeure ? trajet.dateHeure|date('d/m/Y H:i') : 'N/A' }}<br>
+                            <strong>Places :</strong> {{ trajet.nbPlaces }}<br>
+                            <strong>Prix :</strong> {{ trajet.prix }} €<br>
+                            <strong>Description :</strong> {{ trajet.description|default('Aucune') }}
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        {% if trajet.user == app.user %}
+                            <a href="{{ path('app_trajet_edit', {'id': trajet.id}) }}" class="btn btn-warning btn-sm me-2">Modifier</a>
+                            {{ include('trajet/_delete_form.html.twig', {'trajet': trajet}) }}
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        {% else %}
+            <p class="text-center">Aucun trajet trouvé.</p>
