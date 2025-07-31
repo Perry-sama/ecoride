@@ -89,35 +89,9 @@ EcoRide/
 ├── package.json  
 └── ...  
 
-🧱 Création manuelle de la base de données
-En raison d’un blocage persistant avec Doctrine Migrations (MetadataStorageError), la structure de la base de données a été créée manuellement. Les tables user et trajet ont été créées à partir des entités Symfony. Voici le détail des structures :
+## 🧱 Création manuelle de la base de données
 
-Table user  
-id (int, clé primaire, auto-incrémentée)  
-
-email (varchar 180, unique)  
-
-roles (json)  
-
-password (varchar 255)  
-
-is_verified (booléen)  
-
-Table trajet  
-id (int, clé primaire)  
-
-depart, destination (varchar 255)  
-
-date (datetime)  
-
-nb_places (int)  
-
-prix (double)  
-
-description (texte long, optionnel)  
-
-conducteur_id (clé étrangère vers user.id, avec suppression en cascade)  
-
+En raison d’un blocage persistant avec Doctrine Migrations (MetadataStorageError), la structure de la base de données a été créée manuellement. Les tables ont été créées à partir des entités Symfony.  
 
 ## 📋 Licence
 
