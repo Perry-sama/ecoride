@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -14,16 +15,22 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    private ?User $User = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne]
     private ?Trajet $trajet = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: "Le nombre de places doit être supérieur à zéro.")]
     private ?int $places = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -32,12 +39,12 @@ class Reservation
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
@@ -71,10 +78,5 @@ class Reservation
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
+    // Pas de setCreatedAt, on fixe à la création seulement.
 }
