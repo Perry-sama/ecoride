@@ -1,10 +1,3 @@
 _security_logout:
     resource: security.route_loader.logout
     type: service
-
-access_control:
-    - { path: ^/profil, roles: ROLE_USER }
-    - { path: ^/trajet/new, roles: ROLE_USER }
-    - { path: ^/trajet/\d+/edit, roles: ROLE_USER }
-    - { path: ^/reservation, roles: ROLE_USER }
-    - { path: ^/admin, roles: ROLE_ADMIN }
