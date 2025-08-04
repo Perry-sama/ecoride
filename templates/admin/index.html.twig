@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - EcoRide{% endblock %}
+
+{% block body %}
+<section class="container my-5">
+    <h1 class="mb-4">⚙️ Administration - Vue d'ensemble</h1>
+
+    <h2>Utilisateurs ({{ users|length }})</h2>
+    <ul class="list-group mb-4">
+        {% for user in users %}
+            <li class="list-group-item">{{ user.email }}</li>
+        {% else %}
+            <li class="list-group-item">Aucun utilisateur trouvé.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Trajets ({{ trajets|length }})</h2>
+    <ul class="list-group mb-4">
+        {% for trajet in trajets %}
+            <li class="list-group-item">
+                {{ trajet.depart }} → {{ trajet.destination }} par {{ trajet.user.email }}
+            </li>
+        {% else %}
+            <li class="list-group-item">Aucun trajet trouvé.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Réservations ({{ reservations|length }})</h2>
+    <ul class="list-group">
+        {% for reservation in reservations %}
+            <li class="list-group-item">
+                {{ reservation.user.email }} réservé {{ reservation.places }} place(s) pour
+                {{ reservation.trajet.depart }} → {{ reservation.trajet.destination }}
+            </li>
+        {% else %}
+            <li class="list-group-item">Aucune réservation trouvée.</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

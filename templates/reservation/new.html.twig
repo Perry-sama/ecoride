@@ -1,18 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle réservation{% endblock %}
+{% block title %}Réserver un trajet{% endblock %}
 
 {% block body %}
 <main class="container mt-4">
-    <section class="card shadow p-4">
-        <h1>Réserver un trajet</h1>
-        <p><strong>Trajet :</strong> {{ trajet.depart }} → {{ trajet.destination }} | le {{ trajet.dateHeure|date('d/m/Y H:i') }}</p>
-        <p><strong>Places disponibles :</strong> {{ trajet.nbPlaces }}</p>
+    <h2>📝 Réserver une place</h2>
 
-        {{ form_start(form) }}
-            {{ form_row(form.places) }}
-            <button class="btn btn-success mt-2">Réserver</button>
-        {{ form_end(form) }}
-    </section>
+    <div class="card mt-3">
+        <div class="card-header bg-light">
+            Trajet : {{ trajet.depart }} → {{ trajet.destination }} le {{ trajet.dateHeure|date('d/m/Y H:i') }}
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.places) }}
+                    {{ form_widget(form.places, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.places) }}
+                </div>
+                <button class="btn btn-success">Réserver</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <footer class="mt-4">
+        <a href="{{ path('app_trajet_show', {id: trajet.id}) }}" class="btn btn-outline-secondary">⬅️ Retour au trajet</a>
+    </footer>
 </main>
 {% endblock %}

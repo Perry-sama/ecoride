@@ -1,50 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Trajet{% endblock %}
+{% block title %}Détails du trajet - EcoRide{% endblock %}
 
 {% block body %}
-    <h1>Trajet</h1>
+<main class="container mt-4">
+    <section class="card shadow-sm">
+        <header class="card-header bg-primary text-white">
+            <h2 class="mb-0">Trajet de {{ trajet.depart }} à {{ trajet.destination }}</h2>
+        </header>
+        <div class="card-body">
+            <p><strong>Date et heure :</strong> {{ trajet.dateHeure|date('d/m/Y H:i') }}</p>
+            <p><strong>Places restantes :</strong> {{ trajet.nbPlaces }}</p>
+            <p><strong>Prix :</strong> {{ trajet.prix }} €</p>
+            <p><strong>Description :</strong> {{ trajet.description ?: 'Aucune description' }}</p>
+            <p><strong>Créé par :</strong> {{ trajet.user.email }}</p>
+        </div>
+    </section>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ trajet.id }}</td>
-            </tr>
-            <tr>
-                <th>Depart</th>
-                <td>{{ trajet.depart }}</td>
-            </tr>
-            <tr>
-                <th>Destination</th>
-                <td>{{ trajet.destination }}</td>
-            </tr>
-            <tr>
-                <th>DateHeure</th>
-                <td>{{ trajet.dateHeure ? trajet.dateHeure|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>NbPlaces</th>
-                <td>{{ trajet.nbPlaces }}</td>
-            </tr>
-            <tr>
-                <th>Prix</th>
-                <td>{{ trajet.prix }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ trajet.description }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ trajet.createdAt ? trajet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <section class="mt-4">
+        {% if app.user %}
+            {% if app.user == trajet.user %}
+                <div class="alert alert-info mt-3">
+                    🚗 Vous êtes l'auteur de ce trajet.
+                </div>
 
-    <a href="{{ path('app_trajet_index') }}">back to list</a>
+                {% if trajet.reservations|length > 0 %}
+                    <div class="card mt-3">
+                        <div class="card-header bg-secondary text-white">Passagers ayant réservé :</div>
+                        <ul class="list-group list-group-flush">
+                            {% for reservation in trajet.reservations %}
+                                <li class="list-group-item">
+                                    👤 {{ reservation.user.email }} - {{ reservation.places }} place(s)
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <p class="mt-3">Aucun passager pour le moment.</p>
+                {% endif %}
 
-    <a href="{{ path('app_trajet_edit', {'id': trajet.id}) }}">edit</a>
+            {% else %}
+                {% set dejaReserve = false %}
+                {% for reservation in trajet.reservations %}
+                    {% if reservation.user == app.user %}
+                        {% set dejaReserve = true %}
+                    {% endif %}
+                {% endfor %}
 
-    {{ include('trajet/_delete_form.html.twig') }}
+                {% if dejaReserve %}
+                    <div class="alert alert-warning mt-3">
+                        ✅ Vous avez déjà réservé ce trajet.
+                    </div>
+                {% elseif trajet.nbPlaces < 1 %}
+                    <div class="alert alert-danger mt-3">
+                        ❌ Ce trajet est complet.
+                    </div>
+                {% else %}
+                    <a href="{{ path('app_reservation_new', {id: trajet.id}) }}" class="btn btn-success mt-3">
+                        Réserver une place 🚌
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <div class="alert alert-warning mt-3">
+                🔒 Connectez-vous pour réserver ce trajet.
+            </div>
+        {% endif %}
+    </section>
+
+    <footer class="mt-4">
+        <a href="{{ path('app_trajet_index') }}" class="btn btn-outline-secondary">⬅️ Retour à la liste</a>
+    </footer>
+</main>
 {% endblock %}

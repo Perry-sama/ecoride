@@ -27,10 +27,23 @@ final class ReservationController extends AbstractController
     }
 
     #[Route('/new/{id}', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Trajet $trajet, EntityManagerInterface $em): Response
+    public function new(Request $request, Trajet $trajet, EntityManagerInterface $em, ReservationRepository $reservationRepo): Response
     {
+        $user = $this->getUser();
+
+        if ($trajet->getUser() === $user) {
+            $this->addFlash('danger', 'Vous ne pouvez pas réserver votre propre trajet.');
+            return $this->redirectToRoute('app_trajet_show', ['id' => $trajet->getId()]);
+        }
+
+        $dejaReserve = $reservationRepo->findOneBy(['trajet' => $trajet, 'user' => $user]);
+        if ($dejaReserve) {
+            $this->addFlash('warning', 'Vous avez déjà réservé ce trajet.');
+            return $this->redirectToRoute('app_trajet_show', ['id' => $trajet->getId()]);
+        }
+
         $reservation = new Reservation();
-        $reservation->setUser($this->getUser());
+        $reservation->setUser($user);
         $reservation->setTrajet($trajet);
 
         $form = $this->createForm(ReservationType::class, $reservation);
