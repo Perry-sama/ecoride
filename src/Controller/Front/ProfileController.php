@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +43,7 @@ public function changePassword(
 
     if ($form->isSubmitted() && $form->isValid()) {
         $plainPassword = $form->get('plainPassword')->getData();
+        /** @var \App\Entity\User $user */
         $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
 

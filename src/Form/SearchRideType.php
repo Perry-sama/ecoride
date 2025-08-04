@@ -13,11 +13,11 @@ class SearchRideType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('departure', TextType::class, [
+            ->add('depart', TextType::class, [
                 'label' => 'Ville de départ',
                 'attr' => ['placeholder' => 'Ex : Paris']
             ])
-            ->add('arrival', TextType::class, [
+            ->add('arrival', TextType::class, options: [
                 'label' => 'Ville d’arrivée',
                 'attr' => ['placeholder' => 'Ex : Lyon']
             ])

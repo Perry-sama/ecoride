@@ -3,31 +3,23 @@
 namespace App\Form;
 
 use App\Entity\Reservation;
-use App\Entity\Trajet;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('places')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('trajet', EntityType::class, [
-                'class' => Trajet::class,
-                'choice_label' => 'id',
-            ])
-        ;
+            ->add('places', IntegerType::class, [
+                'label' => 'Nombre de places',
+                'constraints' => [
+                    new Positive(['message' => 'Le nombre de places doit être supérieur à 0.']),
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

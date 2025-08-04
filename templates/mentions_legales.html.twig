@@ -1,0 +1,80 @@
+{# templates/mentions_legales.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions Légales - EcoRide{% endblock %}
+
+{% block main %}
+<main>
+  <section>
+    <header>
+      <h1>Mentions Légales</h1>
+      <p>Dernière mise à jour : {{ "now"|date("d/m/Y") }}</p>
+    </header>
+
+    <article>
+      <h2>Éditeur du site</h2>
+      <p>
+        EcoRide<br>
+        SAS au capital social de [à compléter] €<br>
+        Siège social : [adresse complète]<br>
+        SIRET : [numéro SIRET]<br>
+        Numéro de TVA intracommunautaire : [à compléter]
+      </p>
+    </article>
+
+    <article>
+      <h2>Directeur de la publication</h2>
+      <p>
+        Monsieur/Madame [Nom du responsable],<br>
+        en qualité de [fonction]
+      </p>
+    </article>
+
+    <article>
+      <h2>Hébergement</h2>
+      <p>
+        Le site EcoRide est hébergé par :<br>
+        [Nom de l’hébergeur]<br>
+        Adresse : [adresse complète de l’hébergeur]<br>
+        Téléphone : [numéro]<br>
+        Site web : <a href="[URL]" target="_blank" rel="noopener noreferrer">[URL]</a>
+      </p>
+    </article>
+
+    <article>
+      <h2>Propriété intellectuelle</h2>
+      <p>
+        L’ensemble des contenus (textes, images, logos, vidéos, bases de données) présents sur EcoRide sont la propriété exclusive de EcoRide ou de ses partenaires, protégés par le droit d’auteur. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.
+      </p>
+    </article>
+
+    <article>
+      <h2>Données personnelles</h2>
+      <p>
+        Conformément au Règlement Général sur la Protection des Données (RGPD), EcoRide s’engage à protéger vos données personnelles. Les informations collectées via le site sont utilisées uniquement pour la gestion des réservations et communications liées à nos services.
+      </p>
+      <p>
+        Vous disposez d’un droit d’accès, de rectification, d’effacement et de portabilité de vos données, ainsi que du droit de limiter leur traitement. Pour exercer ces droits, contactez-nous à <a href="mailto:[email de contact]">[email de contact]</a>.
+      </p>
+      <p>
+        Pour en savoir plus, consultez notre <a href="{{ path('app_politique_confidentialite') }}">Politique de confidentialité</a>.
+      </p>
+    </article>
+
+    <article>
+      <h2>Cookies</h2>
+      <p>
+        Le site EcoRide utilise des cookies pour améliorer votre expérience de navigation. Vous pouvez gérer vos préférences via les paramètres de votre navigateur.
+      </p>
+    </article>
+
+    <article>
+      <h2>Responsabilité</h2>
+      <p>
+        EcoRide met tout en œuvre pour garantir l’exactitude des informations publiées. Toutefois, EcoRide décline toute responsabilité en cas d’erreurs, d’omissions ou de modifications post-publication.
+      </p>
+    </article>
+  </section>
+</main>
+{% endblock %}
