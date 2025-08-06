@@ -7,6 +7,10 @@
     <section class="card p-4 shadow rounded-4">
         <h1 class="mb-4">Créer un nouveau trajet</h1>
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+
         {{ form_start(form) }}
             {{ form_row(form.depart) }}
             {{ form_row(form.destination) }}
@@ -18,7 +22,7 @@
         {{ form_end(form) }}
 
         <div class="mt-3">
-            <a href="{{ path('app_trajet_index') }}" class="btn btn-outline-secondary">Retour à la liste</a>
+            <a href="{{ path('app_trajet_index') }}" class="btn btn-outline-secondary">← Retour à la liste</a>
         </div>
     </section>
 </main>

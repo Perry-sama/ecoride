@@ -6,7 +6,11 @@
 <main class="container my-5">
     <section class="text-center mb-4">
         <h1>Liste des trajets</h1>
-        <a href="{{ path('app_trajet_new') }}" class="btn btn-primary mt-2">Ajouter un nouveau trajet</a>
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('app_trajet_new') }}" class="btn btn-success mt-2">➕ Proposer un nouveau trajet</a>
+        {% else %}
+            <p><a href="{{ path('app_login') }}" class="btn btn-outline-primary">Connectez-vous pour proposer un trajet</a></p>
+        {% endif %}
     </section>
 
     <section class="row row-cols-1 row-cols-md-2 g-4">
@@ -32,3 +36,7 @@
             </article>
         {% else %}
             <p class="text-center">Aucun trajet trouvé.</p>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

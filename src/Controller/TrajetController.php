@@ -27,14 +27,16 @@ final class TrajetController extends AbstractController
     {
         $trajet = new Trajet();
         $trajet->setUser($this->getUser());
+        $trajet->setCreatedAt(new \DateTime()); // si ton entité le permet
+
         $form = $this->createForm(TrajetType::class, $trajet);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-            {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($trajet);
             $entityManager->flush();
 
+            $this->addFlash('success', '✅ Trajet créé avec succès !');
             return $this->redirectToRoute('app_trajet_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -55,15 +57,14 @@ final class TrajetController extends AbstractController
     #[Route('/{id}/edit', name: 'app_trajet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): Response
     {
-        if ($trajet->getUser() !== $this->getUser())
-            {
-    throw $this->createAccessDeniedException("Vous n'êtes pas autorisé à modifier ce trajet.");
-}
+        if ($trajet->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException("❌ Vous n'êtes pas autorisé à modifier ce trajet.");
+        }
+
         $form = $this->createForm(TrajetType::class, $trajet);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
-            {
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_trajet_index', [], Response::HTTP_SEE_OTHER);
@@ -78,8 +79,7 @@ final class TrajetController extends AbstractController
     #[Route('/{id}', name: 'app_trajet_delete', methods: ['POST'])]
     public function delete(Request $request, Trajet $trajet, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trajet->getId(), $request->getPayload()->getString('_token')))
-            {
+        if ($this->isCsrfTokenValid('delete' . $trajet->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($trajet);
             $entityManager->flush();
         }
