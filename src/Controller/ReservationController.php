@@ -2,110 +2,53 @@
 
 namespace App\Controller;
 
-use App\Entity\Reservation;
 use App\Entity\Trajet;
-use App\Form\ReservationType;
-use App\Repository\ReservationRepository;
+use App\Entity\Reservation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/reservation')]
-final class ReservationController extends AbstractController
+class ReservationController extends AbstractController
 {
-    #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
-    public function index(ReservationRepository $reservationRepository): Response
+    #[Route('/trajet/{id}', name: 'app_reservation_trajet')]
+    #[IsGranted('ROLE_USER')]
+    public function reserver(Trajet $trajet, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
-        $reservations = $reservationRepository->findBy(['user' => $user]);
 
-        return $this->render('reservation/index.html.twig', [
-            'reservations' => $reservations,
+        // Vérifie si le trajet a encore des places
+        if ($trajet->getNbPlaces() <= 0) {
+            $this->addFlash('danger', 'Ce trajet est complet.');
+            return $this->redirectToRoute('trajet_index');
+        }
+
+        // Vérifie si l'utilisateur a déjà réservé ce trajet
+        $existing = $em->getRepository(Reservation::class)->findOneBy([
+            'trajet' => $trajet,
+            'user' => $user,
         ]);
-    }
 
-    #[Route('/new/{id}', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Trajet $trajet, EntityManagerInterface $em, ReservationRepository $reservationRepo): Response
-    {
-        $user = $this->getUser();
-
-        if ($trajet->getUser() === $user) {
-            $this->addFlash('danger', 'Vous ne pouvez pas réserver votre propre trajet.');
-            return $this->redirectToRoute('app_trajet_show', ['id' => $trajet->getId()]);
-        }
-
-        $dejaReserve = $reservationRepo->findOneBy(['trajet' => $trajet, 'user' => $user]);
-        if ($dejaReserve) {
+        if ($existing) {
             $this->addFlash('warning', 'Vous avez déjà réservé ce trajet.');
-            return $this->redirectToRoute('app_trajet_show', ['id' => $trajet->getId()]);
+            return $this->redirectToRoute('trajet_index');
         }
 
+        // Crée la réservation
         $reservation = new Reservation();
         $reservation->setUser($user);
         $reservation->setTrajet($trajet);
+        $reservation->setPlaces(1); // Par défaut 1 place réservée
 
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
+        // Met à jour les places restantes
+        $trajet->setNbPlaces($trajet->getNbPlaces() - 1);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $placesDemandées = $reservation->getPlaces();
-            $placesDispo = $trajet->getNbPlaces();
+        $em->persist($reservation);
+        $em->flush();
 
-            if ($placesDemandées > $placesDispo) {
-                $this->addFlash('danger', 'Il ne reste que ' . $placesDispo . ' place(s) disponible(s) pour ce trajet.');
-            } else {
-                $trajet->setNbPlaces($placesDispo - $placesDemandées);
-                $em->persist($reservation);
-                $em->flush();
-
-                $this->addFlash('success', 'Réservation effectuée avec succès ✅');
-                return $this->redirectToRoute('app_reservation_index');
-            }
-        }
-
-        return $this->render('reservation/new.html.twig', [
-            'form' => $form->createView(),
-            'trajet' => $trajet,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_reservation_show', methods: ['GET'])]
-    public function show(Reservation $reservation): Response
-    {
-        return $this->render('reservation/show.html.twig', [
-            'reservation' => $reservation,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_reservation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Reservation $reservation, EntityManagerInterface $em): Response
-    {
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'Réservation modifiée avec succès !');
-            return $this->redirectToRoute('app_reservation_index');
-        }
-
-        return $this->render('reservation/edit.html.twig', [
-            'form' => $form->createView(),
-            'reservation' => $reservation,
-        ]);
-    }
-
-    #[Route('/{id}/delete', name: 'app_reservation_delete', methods: ['POST'])]
-    public function delete(Request $request, Reservation $reservation, EntityManagerInterface $em): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $reservation->getId(), $request->getPayload()->getString('_token'))) {
-            $em->remove($reservation);
-            $em->flush();
-            $this->addFlash('success', 'Réservation annulée.');
-        }
-
-        return $this->redirectToRoute('app_reservation_index');
+        $this->addFlash('success', 'Réservation effectuée avec succès.');
+        return $this->redirectToRoute('trajet_index');
     }
 }

@@ -40,4 +40,15 @@ class ReservationRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findAllWithUserAndTrajet()
+{
+    return $this->createQueryBuilder('r')
+        ->addSelect('u')
+        ->addSelect('t')
+        ->join('r.user', 'u')
+        ->join('r.trajet', 't')
+        ->orderBy('r.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
 }

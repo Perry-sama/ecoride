@@ -1,0 +1,24 @@
+<section class="mt-5">
+    <h2 class="mb-4">🚗 Mes réservations de trajets</h2>
+
+    {% if reservations is not empty %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for reservation in reservations %}
+                <article class="col">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ reservation.trajet.depart }} → {{ reservation.trajet.destination }}</h5>
+                            <p class="card-text">
+                                <strong>Date/Heure :</strong> {{ reservation.trajet.dateHeure ? reservation.trajet.dateHeure|date('d/m/Y H:i') : 'N/A' }}<br>
+                                <strong>Prix :</strong> {{ reservation.trajet.prix }} €<br>
+                                <strong>Conducteur :</strong> {{ reservation.trajet.user.email }}
+                            </p>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Aucune réservation enregistrée pour l’instant.</p>
+    {% endif %}
+</section>

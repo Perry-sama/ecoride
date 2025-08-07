@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des réservations{% endblock %}
+
+{% block body %}
+<main class="container my-5">
+    <h1 class="mb-4">Liste des réservations</h1>
+
+    {% if reservations is empty %}
+        <p class="text-muted">Aucune réservation enregistrée.</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Utilisateur</th>
+                        <th>Trajet</th>
+                        <th>Date / Heure</th>
+                        <th>Places réservées</th>
+                        <th>Date de réservation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.id }}</td>
+                            <td>
+                                {{ reservation.user.firstname }} {{ reservation.user.lastname }}<br>
+                                <small class="text-muted">{{ reservation.user.email }}</small>
+                            </td>
+                            <td>
+                                {{ reservation.trajet.depart }} → {{ reservation.trajet.destination }}
+                            </td>
+                            <td>{{ reservation.trajet.dateHeure ? reservation.trajet.dateHeure|date('d/m/Y H:i') : 'N/A' }}</td>
+                            <td>{{ reservation.places }}</td>
+                            <td>{{ reservation.createdAt ? reservation.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

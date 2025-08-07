@@ -26,16 +26,23 @@
                             <strong>Description :</strong> {{ trajet.description|default('Aucune') }}
                         </p>
                     </div>
-                    <div class="card-footer text-center">
+                    <footer class="card-footer text-center d-flex justify-content-center gap-2 flex-wrap">
                         {% if trajet.user == app.user %}
-                            <a href="{{ path('app_trajet_edit', {'id': trajet.id}) }}" class="btn btn-warning btn-sm me-2">Modifier</a>
+                            <a href="{{ path('app_trajet_edit', {'id': trajet.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                             {{ include('trajet/_delete_form.html.twig', {'trajet': trajet}) }}
+                        {% elseif is_granted('ROLE_USER') %}
+                            <form action="{{ path('app_reservation_trajet', {'id': trajet.id}) }}" method="post" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('reserver' ~ trajet.id) }}">
+                                <button type="submit" class="btn btn-outline-success btn-sm">Réserver</button>
+                            </form>
                         {% endif %}
-                    </div>
+                    </footer>
                 </div>
             </article>
         {% else %}
-            <p class="text-center">Aucun trajet trouvé.</p>
+            <div class="col text-center">
+                <p>Aucun trajet trouvé.</p>
+            </div>
         {% endfor %}
     </section>
 </main>

@@ -17,25 +17,22 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class UserController extends AbstractController
 {
-    #[Route('/profil', name: 'app_user_profil')]
-    public function profil(
-        TrajetRepository $trajetRepo,
-        ReservationRepository $reservationRepo,
-        Security $security
-    ): Response {
-        $user = $security->getUser();
+   #[Route('/mon-profil', name: 'app_profil')]
+public function profil(ReservationRepository $reservationRepository): Response
+{
+    /** @var User $user */
+    $user = $this->getUser();
 
-        if (!$user) {
-            $this->addFlash('warning', 'Vous devez être connecté pour accéder à votre profil.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        $trajetsCrees = $trajetRepo->findBy(['user' => $user]);
-        $reservations = $reservationRepo->findBy(['user' => $user]);
-
-        return $this->render('user/mon_profil.html.twig', [
-            'trajets_crees' => $trajetsCrees,
-            'trajets_reserves' => $reservations,
-        ]);
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
     }
+
+    // Récupération des réservations de l'utilisateur connecté
+    $reservations = $reservationRepository->findBy(['user' => $user]);
+
+    return $this->render('user/profil.html.twig', [
+        'user' => $user,
+        'reservations' => $reservations,
+    ]);
+}
 }
