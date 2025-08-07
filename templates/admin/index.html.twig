@@ -1,41 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Administration - EcoRide{% endblock %}
+{% block title %}Gestion des utilisateurs{% endblock %}
 
 {% block body %}
-<section class="container my-5">
-    <h1 class="mb-4">⚙️ Administration - Vue d'ensemble</h1>
+<main class="container mt-4">
+    <section>
+        <h1 class="mb-4">Gestion des utilisateurs</h1>
 
-    <h2>Utilisateurs ({{ users|length }})</h2>
-    <ul class="list-group mb-4">
-        {% for user in users %}
-            <li class="list-group-item">{{ user.email }}</li>
-        {% else %}
-            <li class="list-group-item">Aucun utilisateur trouvé.</li>
-        {% endfor %}
-    </ul>
+        <table class="table table-hover table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Rôles</th>
+                    <th>Inscrit le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% for role in user.roles %}
+                                <span class="badge bg-secondary">{{ role }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : 'N/A' }}</td>
+                        <td>
+                             <a href="{{ path('admin_user_edit_roles', {id: user.id}) }}" class="btn btn-sm btn-outline-primary">
+                             Modifier rôles
+                             </a>
+                        </td>
 
-    <h2>Trajets ({{ trajets|length }})</h2>
-    <ul class="list-group mb-4">
-        {% for trajet in trajets %}
-            <li class="list-group-item">
-                {{ trajet.depart }} → {{ trajet.destination }} par {{ trajet.user.email }}
-            </li>
-        {% else %}
-            <li class="list-group-item">Aucun trajet trouvé.</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Réservations ({{ reservations|length }})</h2>
-    <ul class="list-group">
-        {% for reservation in reservations %}
-            <li class="list-group-item">
-                {{ reservation.user.email }} réservé {{ reservation.places }} place(s) pour
-                {{ reservation.trajet.depart }} → {{ reservation.trajet.destination }}
-            </li>
-        {% else %}
-            <li class="list-group-item">Aucune réservation trouvée.</li>
-        {% endfor %}
-    </ul>
-</section>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center">Aucun utilisateur trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
 {% endblock %}
