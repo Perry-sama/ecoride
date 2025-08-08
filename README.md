@@ -1,98 +1,75 @@
- # EcoRide – Application de covoiturage écologique 🌱
+# EcoRide – Application de covoiturage écologique 🌱
 
 Bienvenue sur le dépôt du projet **EcoRide**, une application web de covoiturage pensée pour l'écologie.  
-Cette plateforme permet de créer, chercher et réserver des trajets en voiture, en mettant l’accent sur les véhicules électriques.
+Cette plateforme permet de créer, chercher et réserver des trajets en voiture, avec un focus sur les véhicules électriques.  
 
 ---
 
 ## 🚀 Stack technique
 
-- **Front-end** : HTML5, CSS3, Bootstrap, JavaScript, React
-- **Back-end** : PHP 8.x avec Symfony
-- **Base de données relationnelle** : MySQL / MariaDB
-- **Base de données NoSQL** : MongoDB
-- **Outils** : GitHub, Trello, Postman, VS Code
+- **Front-end** : HTML5, CSS3, Bootstrap, JavaScript, React  
+- **Back-end** : PHP 8.x avec Symfony  
+- **Base de données relationnelle** : MySQL / MariaDB  
+- **Base de données NoSQL** : MongoDB (utilisation complémentaire)  
+- **Outils** : GitHub, Trello, Postman, VS Code  
 
 ---
 
 ## 🔧 Installation en local
 
-1. Cloner le dépôt GitHub :  
-   git clone https://github.com/Perry-sama/ecoride.git
+### 1. Cloner le dépôt
 
-2. Aller dans le dossier back-end :  
-   cd ecoride/back
-
-3. Installer les dépendances PHP :  
-   composer install
-
-4. Créer la base de données :  
-   php bin/console doctrine:database:create
-
-5. Lancer les migrations :  
-   php bin/console doctrine:migrations:migrate
-
-6. Importer les données :  
-   php bin/console doctrine:fixtures:load
-
-7. Démarrer le serveur Symfony :  
-   symfony server:start
-
-8. Pour le front :  
-   cd ../front  
-   npm install  
-   npm start  
-   
-### 1. Cloner le projet
 git clone https://github.com/Perry-sama/ecoride.git  
-cd ecoride
+cd ecoride/back  
 
 ### 2. Installer le back-end Symfony
-cd back  
+
 composer install  
 php bin/console doctrine:database:create  
 php bin/console doctrine:migrations:migrate  
 php bin/console doctrine:fixtures:load  
 symfony server:start  
 
-### 3. Installer le front
+### 3. Installer le front-end React
 
 cd ../front  
 npm install  
 npm start  
 
-## Accès test
+## 📁 Arborescence du projet
 
-Admin : admin@ecoride.fr  
- / Admin123!
+<img width="314" height="687" alt="Capture d'écran 2025-08-08 125115" src="https://github.com/user-attachments/assets/157c38a1-6d73-4f6f-88b4-64e247fff23a" />
 
-Utilisateur : user@ecoride.fr  
- / User123!
+## 🔐 Sécurité
 
-## Arborescence
+Gestion des rôles (ROLE_USER, ROLE_EMPLOYEE, ROLE_ADMIN) avec hiérarchie définie dans security.yaml  
+Suspension des comptes via flag isActive (contrôlé par UserChecker)  
+Hashage sécurisé des mots de passe (algorithme auto de Symfony)  
+Contrôle d’accès basé sur les rôles et l’état des comptes  
 
-EcoRide/  
-├── assets/  
-├── bin/  
-├── config/  
-├── migrations/  
-├── node_modules/   (si tu fais `npm install`)  
-├── public/  
-├── src/  
-├── templates/  
-├── tests/  
-├── translations/  
-├── var/  
-├── vendor/  
-├── .env  
-├── composer.json  
-├── package.json  
-└── ...  
+## 🚀 Déploiement
 
-## 🧱 Création manuelle de la base de données
+Configurer un serveur Linux avec PHP 8.1+, MySQL, Apache ou Nginx  
 
-En raison d’un blocage persistant avec Doctrine Migrations (MetadataStorageError), la structure de la base de données a été créée manuellement. Les tables ont été créées à partir des entités Symfony.  
+Cloner le projet sur le serveur  
+Configurer .env pour l’environnement production  
+Installer les dépendances (composer install --no-dev)  
+Appliquer les migrations ou importer la base manuellement  
+Configurer SSL (Let’s Encrypt recommandé)  
+Mettre en place la supervision et backups  
 
-## 📋 Licence
+## 📚 Documentation & Livrables
 
-Ce projet est développé dans le cadre d’une évaluation en cours de formation pour le titre Développeur Web et Web Mobile.
+Manuel d’utilisation (PDF)  
+Charte graphique (PDF) incluant palette de couleurs et typographies  
+Diagrammes UML (modèle conceptuel, cas d’utilisation, séquences)  
+Documentation technique (architecture, choix technologiques, déploiement)  
+Gestion de projet sous forme de Kanban (Trello)  
+README complet avec instructions de déploiement  
+
+## 📝 Licence
+
+Ce projet a été développé dans le cadre de la formation Développeur Web et Web Mobile - ECF Studi.  
+Reproduction interdite sans autorisation.  
+
+## Merci de votre intérêt pour EcoRide !
