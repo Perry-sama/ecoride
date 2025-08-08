@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Admin{% endblock %}
+
+{% block body %}
+<h1>Tableau de bord administrateur</h1>
+
+<h2>Total crédits gagnés : {{ totalCredits|number_format(2, ',', ' ') }} €</h2>
+
+<h3>Nombre de covoiturages par jour</h3>
+<canvas id="covoituragesChart" width="600" height="300"></canvas>
+
+<h3>Gains de la plateforme par jour</h3>
+<canvas id="gainsChart" width="600" height="300"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const covoituragesCtx = document.getElementById('covoituragesChart').getContext('2d');
+    const gainsCtx = document.getElementById('gainsChart').getContext('2d');
+
+    const covoituragesData = {
+        labels: {{ covoituragesPerDay|map(item => item.day)|json_encode()|raw }},
+        datasets: [{
+            label: 'Covoiturages par jour',
+            data: {{ covoituragesPerDay|map(item => item.count)|json_encode()|raw }},
+            borderColor: 'blue',
+            backgroundColor: 'rgba(0,0,255,0.2)',
+            fill: true,
+            tension: 0.3
+        }]
+    };
+
+    const gainsData = {
+        labels: {{ gainPerDay|map(item => item.day)|json_encode()|raw }},
+        datasets: [{
+            label: 'Gains (€) par jour',
+            data: {{ gainPerDay|map(item => item.gain)|json_encode()|raw }},
+            borderColor: 'green',
+            backgroundColor: 'rgba(0,128,0,0.2)',
+            fill: true,
+            tension: 0.3
+        }]
+    };
+
+    new Chart(covoituragesCtx, {
+        type: 'line',
+        data: covoituragesData,
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+
+    new Chart(gainsCtx, {
+        type: 'line',
+        data: gainsData,
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+{% endblock %}

@@ -16,39 +16,15 @@ class ReservationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reservation::class);
     }
 
-    //    /**
-    //     * @return Reservation[] Returns an array of Reservation objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Reservation
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-    public function findAllWithUserAndTrajet()
-{
-    return $this->createQueryBuilder('r')
-        ->addSelect('u')
-        ->addSelect('t')
-        ->join('r.user', 'u')
-        ->join('r.trajet', 't')
-        ->orderBy('r.createdAt', 'DESC')
-        ->getQuery()
-        ->getResult();
-}
+    public function findAllWithUserAndTrajet(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->addSelect('u')
+            ->addSelect('t')
+            ->leftJoin('r.user', 'u')
+            ->leftJoin('r.trajet', 't')
+            ->orderBy('r.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

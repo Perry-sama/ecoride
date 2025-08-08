@@ -3,12 +3,10 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     providers:
-        users_in_memory: { memory: null }
-        # Pour la prod, il faudra passer à un provider basé sur l'entité User :
-        # entity_provider:
-        #     entity:
-        #         class: App\Entity\User
-        #         property: email
+        entity_provider:
+            entity:
+                class: App\Entity\User
+                property: email
 
     firewalls:
         dev:
@@ -17,14 +15,14 @@ security:
 
         main:
             lazy: true
-            provider: users_in_memory
-            # Exemple d'authentification, à adapter selon besoin
-            # form_login:
-            #     login_path: login
-            #     check_path: login
-            # logout:
-            #     path: logout
-            #     target: /
+            provider: entity_provider
+            user_checker: App\Security\UserChecker
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path: logout
+                target: /
 
     role_hierarchy:
         ROLE_EMPLOYEE: ROLE_USER
@@ -39,12 +37,3 @@ security:
         - { path: ^/review/employee, roles: ROLE_EMPLOYEE }
         - { path: ^/review/moderate, roles: ROLE_EMPLOYEE }
         - { path: ^/admin, roles: ROLE_ADMIN }
-
-when@test:
-    security:
-        password_hashers:
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4
-                time_cost: 3
-                memory_cost: 10

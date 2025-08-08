@@ -41,11 +41,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isVerified = null;
 
-    // Relation inverse Review : avis écrits par cet utilisateur
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true;
+
+    // Relations avec Review
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $writtenReviews;
 
-    // Relation inverse Review : avis reçus (en tant que chauffeur)
     #[ORM\OneToMany(mappedBy: 'driver', targetEntity: Review::class, orphanRemoval: true)]
     private Collection $receivedReviews;
 
@@ -56,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->receivedReviews = new ArrayCollection();
     }
 
-    // Getters et setters habituels (pas besoin de recopier, sauf si tu veux)
+    // Getters / Setters habituels
 
     public function getId(): ?int
     {
@@ -105,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // Pas de données sensibles à effacer ici
+        // Rien à faire ici
     }
 
     public function getFirstname(): ?string
@@ -152,7 +154,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Getters pour reviews
+    public function getIsActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
+        return $this;
+    }
 
     /**
      * @return Collection|Review[]
