@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Avis en attente de validation{% endblock %}
+
+{% block body %}
+<h1>Avis à modérer</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Auteur</th>
+            <th>Conducteur</th>
+            <th>Trajet</th>
+            <th>Contenu</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for review in reviews %}
+        <tr>
+            <td>{{ review.id }}</td>
+            <td>{{ review.author.firstname }} {{ review.author.lastname }}</td>
+            <td>{{ review.driver.firstname }} {{ review.driver.lastname }}</td>
+            <td>{{ review.trip.depart }} → {{ review.trip.destination }}</td>
+            <td>{{ review.content|length > 50 ? review.content|slice(0, 50) ~ '...' : review.content }}</td>
+            <td>
+                <a href="{{ path('review_moderate', {'id': review.id}) }}" class="btn btn-warning btn-sm">Modérer</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr><td colspan="6">Aucun avis en attente.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

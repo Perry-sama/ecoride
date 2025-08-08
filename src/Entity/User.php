@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
@@ -11,7 +13,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
-
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,15 +22,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
+    /** @var list<string> */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -41,10 +37,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = null;
+
+    // Relation inverse Review : avis écrits par cet utilisateur
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Review::class, orphanRemoval: true)]
+    private Collection $writtenReviews;
+
+    // Relation inverse Review : avis reçus (en tant que chauffeur)
+    #[ORM\OneToMany(mappedBy: 'driver', targetEntity: Review::class, orphanRemoval: true)]
+    private Collection $receivedReviews;
+
     public function __construct()
-{
-    $this->createdAt = new \DateTimeImmutable();
-}
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->writtenReviews = new ArrayCollection();
+        $this->receivedReviews = new ArrayCollection();
+    }
+
+    // Getters et setters habituels (pas besoin de recopier, sauf si tu veux)
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,95 +71,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): static
     {
         $this->password = $password;
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
+    public function eraseCredentials(): void
     {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
-        return $data;
+        // Pas de données sensibles à effacer ici
     }
 
-    #[\Deprecated]
-    public function eraseCredentials(): void
-{
-    // Si tu stockes des données temporaires sensibles, efface-les ici
-}
-public function getFirstname(): ?string
-{
-    return $this->firstname;
-}
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
 
-public function setFirstname(?string $firstname): self
-{
-    $this->firstname = $firstname;
+    public function setFirstname(?string $firstname): static
+    {
+        $this->firstname = $firstname;
+        return $this;
+    }
 
-    return $this;
-}
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
 
-   public function getLastname(): ?string
-{
-    return $this->lastname;
-}
-
-public function setLastname(?string $lastname): self
-{
-    $this->lastname = $lastname;
-
-    return $this;
-}
+    public function setLastname(?string $lastname): static
+    {
+        $this->lastname = $lastname;
+        return $this;
+    }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
@@ -156,22 +138,35 @@ public function setLastname(?string $lastname): self
     public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
-    #[ORM\Column]
-    private ?bool $isVerified = null;
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
 
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
-
         return $this;
     }
-    public function getIsVerified(): ?bool
-{
-    return $this->isVerified;
-}
-}
 
+    // Getters pour reviews
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getWrittenReviews(): Collection
+    {
+        return $this->writtenReviews;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReceivedReviews(): Collection
+    {
+        return $this->receivedReviews;
+    }
+}

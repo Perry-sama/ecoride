@@ -15,9 +15,11 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?User $user = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     private ?Trajet $trajet = null;
 
     #[ORM\Column]
@@ -32,6 +34,7 @@ class Reservation
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    // getters/setters classiques ici
     public function getId(): ?int
     {
         return $this->id;
@@ -45,7 +48,6 @@ class Reservation
     public function setUser(?User $user): static
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -57,7 +59,6 @@ class Reservation
     public function setTrajet(?Trajet $trajet): static
     {
         $this->trajet = $trajet;
-
         return $this;
     }
 
@@ -69,7 +70,6 @@ class Reservation
     public function setPlaces(int $places): static
     {
         $this->places = $places;
-
         return $this;
     }
 
@@ -77,6 +77,4 @@ class Reservation
     {
         return $this->createdAt;
     }
-
-    // Pas de setCreatedAt, on fixe à la création seulement.
 }

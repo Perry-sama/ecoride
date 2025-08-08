@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modérer un avis{% endblock %}
+
+{% block body %}
+<h1>Modération de l'avis</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.content) }}
+    {{ form_row(form.status) }}
+    <button class="btn btn-success">Valider</button>
+{{ form_end(form) }}
+
+<a href="{{ path('employee_reviews') }}">Retour à la liste</a>
+{% endblock %}
