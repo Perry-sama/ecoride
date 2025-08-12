@@ -1,38 +1,52 @@
-{# templates/home/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil | EcoRide{% endblock %}
 
 {% block body %}
-    <section class="mb-5">
-        <div class="text-center">
-            <h2 class="mb-3">Bienvenue sur EcoRide</h2>
-            <p class="lead">La plateforme de covoiturage pensée pour la planète 🌍</p>
-            <img src="https://source.unsplash.com/800x300/?car,eco,nature" class="img-fluid rounded shadow" alt="EcoRide Image">
-        </div>
-    </section>
+<section class="mb-5 text-center">
+    <h2 class="mb-3">Bienvenue sur EcoRide</h2>
+    <p class="lead">La plateforme de covoiturage pensée pour la planète 🌍</p>
+    <img src="{{ asset('images/logo.png') }}" alt="Logo EcoRide" class="logo-medallion me-2">
+    <p>Rejoignez-nous pour partager vos trajets et réduire votre empreinte carbone.</p>
+</section>
 
-    <section class="mb-5">
-        <form method="get" action="#" class="d-flex justify-content-center">
-            <input type="text" class="form-control w-50 me-2" placeholder="Rechercher un trajet... (fonctionnalité à venir)" disabled>
-            <button class="btn btn-success" disabled>Rechercher</button>
-        </form>
-    </section>
+<section class="mb-5">
+    <form method="get" action="{{ path('app_home') }}" class="search-form justify-content-center">
+        <input type="text" name="depart" value="{{ depart }}" placeholder="Ville de départ">
+        <input type="text" name="destination" value="{{ destination }}" placeholder="Ville d'arrivée">
+        <button type="submit">Rechercher</button>
+    </form>
+</section>
 
-    <section>
-        <div class="row text-center">
-            <div class="col-md-4 mb-3">
-                <h5>Écologique 🌿</h5>
-                <p>Réduisez votre empreinte carbone en partageant vos trajets.</p>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h5>Économique 💸</h5>
-                <p>Divisez les frais de transport entre conducteurs et passagers.</p>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h5>Communautaire 🤝</h5>
-                <p>Rencontrez d’autres voyageurs partageant les mêmes valeurs.</p>
-            </div>
-        </div>
-    </section>
+{% if trajets is not empty %}
+<section class="results">
+    <h3>Résultats de recherche</h3>
+    <ul>
+        {% for trajet in trajets %}
+            <li>
+                <strong>{{ trajet.depart }}</strong> → <strong>{{ trajet.destination }}</strong>
+                <br>
+                {{ trajet.dateHeure|date('d/m/Y H:i') }} — {{ trajet.prix }} €
+            </li>
+        {% endfor %}
+    </ul>
+</section>
+{% elseif depart or destination %}
+    <p class="text-center">Aucun trajet trouvé.</p>
+{% endif %}
+
+<section class="row text-center mt-5">
+    <div class="col-md-4 mb-3">
+        <h5>Écologique 🌿</h5>
+        <p>Réduisez votre empreinte carbone en partageant vos trajets.</p>
+    </div>
+    <div class="col-md-4 mb-3">
+        <h5>Économique 💸</h5>
+        <p>Divisez les frais de transport entre conducteurs et passagers.</p>
+    </div>
+    <div class="col-md-4 mb-3">
+        <h5>Communautaire 🤝</h5>
+        <p>Rencontrez d’autres voyageurs partageant les mêmes valeurs.</p>
+    </div>
+</section>
 {% endblock %}
