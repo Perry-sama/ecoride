@@ -4,12 +4,12 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "8.4.*",
+        "php": ">=8.2 <8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
-        "ext-mbstring": "*",
         "ext-zip": "*",
+        "ext-mbstring": "*",
         "doctrine/dbal": "^3.10",
         "doctrine/doctrine-bundle": "^2.15",
         "doctrine/doctrine-migrations-bundle": "^3.4",
@@ -17,7 +17,6 @@
         "dompdf/dompdf": ">=3.1",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.2",
-        "symfony/apache-pack": "*",
         "symfony/asset": "7.3.*",
         "symfony/asset-mapper": "7.3.*",
         "symfony/console": "7.3.*",
@@ -46,11 +45,10 @@
         "symfony/ux-turbo": "^2.29",
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",
-        "symfony/yaml": "7.3.*",
         "symfonycasts/reset-password-bundle": "^1.23",
         "symfonycasts/verify-email-bundle": "^1.17",
-        "twig/extra-bundle": "^2.12 || ^3.21",
-        "twig/twig": "^2.12 || ^3.21"
+        "twig/extra-bundle": "^3.21",
+        "twig/twig": "^3.21"
     },
     "config": {
         "allow-plugins": {
@@ -59,10 +57,7 @@
             "symfony/runtime": true
         },
         "sort-packages": true,
-        "optimize-autoloader": true,
-        "platform": {
-            "php": "8.4.11"
-        }
+        "optimize-autoloader": true
     },
     "autoload": {
         "psr-4": {
@@ -85,18 +80,17 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
-        "compile": [
-           "php bin/console doctrine:migrations:migrate"
-       ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
+            "php platform_check_local.php",
             "@auto-scripts || true"
         ],
         "post-update-cmd": [
+            "php platform_check_local.php",
             "@auto-scripts || true"
         ]
     },
