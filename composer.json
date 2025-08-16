@@ -86,11 +86,11 @@
             "importmap:install": "symfony-cmd"
         },
         "post-install-cmd": [
-            "php platform_check_local.php",
+            "php vendor/composer/platform_check_local.php",
             "@auto-scripts || true"
         ],
         "post-update-cmd": [
-            "php platform_check_local.php",
+            "php vendor/composer/platform_check_local.php",
             "@auto-scripts || true"
         ]
     },
