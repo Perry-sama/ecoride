@@ -81,19 +81,15 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
-        "auto-scripts": {
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "php platform_check_local.php",
-            "@auto-scripts || true"
-        ],
-        "post-update-cmd": [
-            "php platform_check_local.php",
-            "@auto-scripts || true"
-        ]
-    },
+    "auto-scripts": {},
+    "post-install-cmd": [
+        "php platform_check_local.php"
+    ],
+    "post-update-cmd": [
+        "php platform_check_local.php"
+    ]
+},
+
     "conflict": {
         "symfony/symfony": "*"
     },
