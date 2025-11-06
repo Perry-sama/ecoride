@@ -1,0 +1,19 @@
+Livret - Compléments fournis pour l'ECF - EcoRide
+----------------------------------------------------
+
+Résumé des corrections apportées :
+- Ajout Docker pour back et front (Dockerfiles) + docker-compose.override.yml
+- Ajout d'un script SQL manuel (back/init_db.sql) prouvant la rédaction manuelle du schéma
+- Intégration d'un service MongoLogger (back/src/Service/MongoLogger.php) pour prouver l'utilisation de NoSQL
+- Ajout d'un composant front FetchRides.jsx démontrant l'utilisation de fetch/AJAX
+- Rédaction du document SECURITE.md listant les mesures prises et leur justification
+- Dossier docs/maquettes/ contenant 6 images (3 wireframes + 3 maquettes graphiques)
+- Scripts d'installation pour Linux/Mac et Windows (scripts/install_dev.sh + install_dev.bat)
+- README mis à jour avec les sections ajoutées
+
+Instructions rapides :
+1) Pour la version clean : ouvrir EcoRideCorrection-main-clean, lancer `scripts/install_dev.sh` (Linux/Mac) ou `scripts/install_dev.bat` (Windows).
+2) Installer Composer et Node.js si ce n'est pas déjà fait.
+3) Construire et lancer Docker :
+   docker-compose -f docker-compose.override.yml up --build -d
+4) Vérifier le front : http://localhost:3000 ; phpMyAdmin : http://localhost:8081 (root/root)

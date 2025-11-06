@@ -73,3 +73,14 @@ Ce projet a été développé dans le cadre de la formation Développeur Web et 
 Reproduction interdite sans autorisation.  
 
 ## Merci de votre intérêt pour EcoRide !
+
+
+## Livrables ajoutés pour l'ECF (ajouts par Nova)
+- back/init_db.sql (script SQL rédigé manuellement)
+- back/src/Service/MongoLogger.php (exemple NoSQL)
+- SECURITE.md (document de sécurité)
+- docs/maquettes/ (emplacement des maquettes attendues)
+- front/src/components/FetchRides.jsx (exemple d'utilisation fetch/AJAX)
+- docker-compose.override.yml (compose dev : db, mongo, php, front, phpmyadmin)
+- scripts/install_dev.sh (Linux/Mac) & scripts/install_dev.bat (Windows)
+- LIVRET_COMPLEMENTS.txt (résumé pour le jury)
